@@ -5,28 +5,26 @@
 #include "Math/vec.h"
 #include "GL/glew.h"
 
-class myWin : public sf::Window
+//we can define our own window class
+class myWin : public sf::RenderWindow
 {
-    using sf::Window::Window;
+    //copying RenderWindow constructors
+    using sf::RenderWindow::RenderWindow;
 };
 
 int main()
 {
-    //Window Initialization OpenGL version 3.3
-    sf::ContextSettings settings;
-    //settings.attributeFlags = sf::ContextSettings::Attribute::Core;
-
-    settings.majorVersion = 4;
-    settings.minorVersion = 5;
-    sf::RenderWindow window(sf::VideoMode(1000, 900), "OpenGL SFML");
+    //Window Initialization OpenGL version 4.6 (Might not work on mac)
+    sf::RenderWindow window(sf::VideoMode(900, 900), "OpenGL SFML");
     glewExperimental = GL_TRUE;
+    //Initializing opengl functions
     if (GLEW_OK != glewInit())
     {
         std::cout << "Failed to initialize GLEW\n";
         return EXIT_FAILURE;
     }
 
-    //my own defined Triangle
+    //Defining a square covering the screen (JUST FOR TESTING)
     unsigned int vao, ebo, vbo;
     const vec2 vertices[] =
 	{
@@ -58,10 +56,12 @@ int main()
 
 
 
+    //shaders just for testing
+    sf::Shader shader1;
+    shader1.loadFromFile("source/shaders/circle_default.vert", "source/shaders/circle_default.frag");
 
-    sf::Shader shader;
-    shader.loadFromFile("source/shaders/circle_default.vert", "source/shaders/circle_default.frag");
-    shader.bind(&shader);
+    sf::Shader shader2;
+    shader2.loadFromFile("source/shaders/Ring.vert", "source/shaders/Ring.frag");
 
     sf::Font font;
     if (!font.loadFromFile("source/Exo.ttf"))
@@ -71,37 +71,68 @@ int main()
     }
     sf::Text text;
     text.setFont(font);
-    text.setString("FRACTAL");
+    text.setString("RHYTHM");
     text.setCharacterSize(50);
     text.setFillColor(sf::Color(200,0,200));
     text.setStyle(sf::Text::Bold | sf::Text::Underlined);
     text.setOutlineThickness(2);
     text.setOutlineColor(sf::Color::Black);
     
+
+
     DeltaTime Time;
+    Time.set_target_fps(266);
+
+
+    //This is just for testing!
     float intensity = 0;
+    float anim = 0;
+    bool animation_flag = 0;
+    sf::Vector2f pos;
     while (window.isOpen())
     {
-        intensity = 3.0f * sin(Time.get_time());
+        if (Input::mouse_pressed(sf::Mouse::Left))
+        {
+            animation_flag = 1;
+            anim = 0;
+            pos = sf::Vector2f(Input::mouse_x()/450-1, -1*(Input::mouse_y()/450-1));
+        }
+        if (animation_flag == 1 && anim < 1)
+            anim += Time.frame_time()/2;
+        else {
+            anim = 0;
+            animation_flag = 0;
+        }
+        intensity = 4.0f * sin(Time.get_time()/4);
         Time.handle_time();
         Input::handle_events(window);
-        //Time.show_fps();
-        glClearColor(0.07, 0.13, 0.17, 1);
+        Time.show_fps();
+
+        //glClearColor(0.07, 0.13, 0.17, 1);
+        glClearColor(0, 0, 0, 1);
         glClear(GL_COLOR_BUFFER_BIT);
 
-
-
-        //window.resetGLStates();
-        //window.pushGLStates();
-        //window.popGLStates();
-        shader.setUniform("u_iTime", Time.get_time());
-        shader.setUniform("u_intensity", pow(abs(intensity/2),0.6f));
-        shader.bind(&shader);
+        //setting the variables in the shader
+        shader1.setUniform("u_iTime", Time.get_time());
+        shader1.setUniform("u_intensity", pow(abs(intensity/2),0.6f));
+        shader1.bind(&shader1);
         glBindVertexArray(vao);
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
+        //Setting the variables in the shader
+        shader2.setUniform("u_iTime", anim);
+        shader2.setUniform("u_scale", 1.0f);
+        shader2.setUniform("u_position", pos);
+        shader2.setUniform("u_color", sf::Vector3f(0, 1, 0));
+        shader2.bind(&shader2);
+        glBindVertexArray(vao);
+        if(animation_flag==1)
+            glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+
+        //unbinding to draw text
         glBindVertexArray(0);
-        shader.bind(0);
+        shader1.bind(0);
+
         window.draw(text);
 
         window.display();
