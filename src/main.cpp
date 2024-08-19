@@ -3,7 +3,8 @@
 #include "DeltaTime.hpp";
 #include "Input.hpp"
 #include "Math/vec.h"
-#include "GL/glew.h"
+#include "GLAD/glad.h"
+#include <filesystem>
 
 //we can define our own window class
 class myWin : public sf::RenderWindow
@@ -16,9 +17,8 @@ int main()
 {
     //Window Initialization OpenGL version 4.6 (Might not work on mac)
     sf::RenderWindow window(sf::VideoMode(900, 900), "OpenGL SFML");
-    glewExperimental = GL_TRUE;
     //Initializing opengl functions
-    if (GLEW_OK != glewInit())
+    if (!gladLoadGLLoader(reinterpret_cast<GLADloadproc>(sf::Context::getFunction)))
     {
         std::cout << "Failed to initialize GLEW\n";
         return EXIT_FAILURE;
@@ -58,13 +58,13 @@ int main()
 
     //shaders just for testing
     sf::Shader shader1;
-    shader1.loadFromFile("source/shaders/circle_default.vert", "source/shaders/circle_default.frag");
+    shader1.loadFromFile("shaders/circle_default.vert", "shaders/circle_default.frag");
 
     sf::Shader shader2;
-    shader2.loadFromFile("source/shaders/Ring.vert", "source/shaders/Ring.frag");
+    shader2.loadFromFile("shaders/Ring.vert", "shaders/Ring.frag");
 
     sf::Font font;
-    if (!font.loadFromFile("source/Exo.ttf"))
+    if (!font.loadFromFile("assets/Exo.ttf"))
     {
         std::cout << "couldn't load fonts\n";
         return 1;
@@ -106,7 +106,7 @@ int main()
         intensity = 4.0f * sin(Time.get_time()/4);
         Time.handle_time();
         Input::handle_events(window);
-        Time.show_fps();
+        //Time.show_fps();
 
         //glClearColor(0.07, 0.13, 0.17, 1);
         glClearColor(0, 0, 0, 1);
