@@ -1,11 +1,10 @@
-#include <iostream>
-#include "SFML/Graphics.hpp"
-#include "DeltaTime.hpp";
-#include "Input.hpp"
-#include "Math/vec.h"
-#include "GLAD/glad.h"
-#include <filesystem>
 
+#include "SFML/Graphics.hpp"
+#include "GLAD/glad.h"
+#include <Array>
+#include "Math/mat.h"
+#include "DeltaTime.hpp"
+#include "Input.hpp"
 //we can define our own window class
 class myWin : public sf::RenderWindow
 {
@@ -15,6 +14,7 @@ class myWin : public sf::RenderWindow
 
 int main()
 {
+    
     //Window Initialization OpenGL version 4.6 (Might not work on mac)
     sf::RenderWindow window(sf::VideoMode(900, 900), "OpenGL SFML");
     //Initializing opengl functions
@@ -115,7 +115,7 @@ int main()
         //setting the variables in the shader
         shader1.setUniform("u_iTime", Time.get_time());
         shader1.setUniform("u_intensity", pow(abs(intensity/2),0.6f));
-        shader1.bind(&shader1);
+        sf::Shader::bind(&shader1);
         glBindVertexArray(vao);
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 

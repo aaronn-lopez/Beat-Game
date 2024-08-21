@@ -56,11 +56,11 @@ inline void Input::handle_events(sf::Window& window)
 				get().mouse_button_state[Event.mouseButton.button] = 2;
 			break;
 		case sf::Event::MouseMoved:
-			get()._mouse_x = Event.mouseMove.x;
-			get()._mouse_y = Event.mouseMove.y;
+			get()._mouse_x = static_cast<float>(Event.mouseMove.x);
+			get()._mouse_y = static_cast<float>(Event.mouseMove.y);
 			break;
 		case sf::Event::MouseWheelScrolled:
-			get().mouse_wheel_state = Event.mouseWheelScroll.delta;
+			get().mouse_wheel_state = static_cast<int>(Event.mouseWheelScroll.delta);
 			break;
 		}
 	}

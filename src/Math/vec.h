@@ -292,9 +292,9 @@ inline std::ostream& operator<<(std::ostream& os, const vec4& v) {
 }
 
 template<typename T>
-T clamp(T value, T min, T max){ return (value > max ? max : (value < min ? min : value)); }
+inline T clamp(T value, T min, T max){ return (value > max ? max : (value < min ? min : value)); }
 template<typename T>
-T mix(T a, T b, float amount) { return a + amount * (b - a); }
+inline T mix(T a, T b, float amount) { return a + amount * (b - a); }
 inline float length(const vec2& v) { return sqrtf(v.x * v.x + v.y * v.y); }
 inline float length(const vec3& v) { return sqrtf(v.x * v.x + v.y * v.y + v.z * v.z); };
 inline float length(const vec4& v) { return sqrtf(v.x * v.x + v.y * v.y + v.z * v.z + v.w * v.w); };
