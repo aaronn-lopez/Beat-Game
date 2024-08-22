@@ -17,18 +17,6 @@ inline GLsizei GLsizeof(GLenum type)
         default: return 0;
     } 
 }
-//class MeshFormat
-//{
-//public:
-//    GLuint attribute_index = 0;
-//    GLint size = 0;
-//    GLenum gl_type = 0;
-//    GLsizei stride_bytes = 0;
-//    GLsizei offset_bytes = 0;
-//    MeshFormat(){};
-//    MeshFormat(GLuint attribute_index, GLint size, GLenum gl_type, GLsizei stride_bytes, GLsizei offset_bytes)
-//    : attribute_index(attribute_index), size(size), gl_type(gl_type), stride_bytes(stride_bytes), offset_bytes(offset_bytes){}
-//};
 class Mesh
 {
     inline static GLuint current_binded_vao = 0;
@@ -69,7 +57,7 @@ Mesh::Mesh(const void* vertices_data, size_t v_bytes, const void* indices_data, 
 { 
     glBindVertexArray(vao);
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vbo);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
     glBufferData(GL_ARRAY_BUFFER, v_bytes, vertices_data, GL_STATIC_DRAW);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, i_bytes, indices_data, GL_STATIC_DRAW);
 }
@@ -83,7 +71,9 @@ void Mesh::bind()
 {
     glBindVertexArray(vao);
 }
-void Mesh::set_attrib_format(GLuint layout_index, GLint size, GLenum gl_type, int stride, int offset)
+void Mesh::set_attrib_format(GLuint layout_index, GLint size, GLenum gl_type, int stride, int offset) 
 {
+    //WARNING - possible warning, int to void*
     glVertexAttribPointer(layout_index, size, gl_type, GL_FALSE, GLsizeof(gl_type) * stride, (void*)(GLsizeof(gl_type) * offset));
+    glEnableVertexAttribArray(layout_index);
 }

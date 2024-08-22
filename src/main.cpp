@@ -25,7 +25,6 @@ int main()
     }
 
     //Defining a square covering the screen (JUST FOR TESTING)
-    unsigned int vao, ebo, vbo;
     const vec2 vertices[] =
 	{
 		vec2(-1,-1), vec2(-1,-1),
@@ -34,29 +33,13 @@ int main()
 		vec2(-1,1), vec2(-1,1)
 	};
 	const unsigned int indices[] = { 0,1,2,0,2,3 };
-    glGenVertexArrays(1, &vao);
-    glGenBuffers(1, &vbo);
-    glGenBuffers(1, &ebo);
-
-    glBindVertexArray(vao);
-    glBindBuffer(GL_ARRAY_BUFFER, vbo);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
-
-    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(vec2) * 2, (void*)0);
-    glEnableVertexAttribArray(0);
-    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(vec2) * 2, (void*)sizeof(vec2));
-    glEnableVertexAttribArray(1);
-
-    glBindVertexArray(0);
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
 
     Mesh v(vertices, sizeof(vertices), indices, sizeof(indices));
     v.set_attrib_format(0, 2, GL_FLOAT, 4, 0);
     v.set_attrib_format(1, 2, GL_FLOAT, 4, 2);
+    //v.set_attrib_format(0, 2, GL_FLOAT, sizeof(vec2)*2, 0);
+    //v.set_attrib_format(0, 2, GL_FLOAT, sizeof(vec2)*2, sizeof(vec2));
 
 
 
@@ -121,7 +104,8 @@ int main()
         shader1.setUniform("u_iTime", Time.get_time());
         shader1.setUniform("u_intensity", pow(abs(intensity/2),0.6f));
         shader1.bind(&shader1);
-        glBindVertexArray(vao);
+        v.bind();
+        //glBindVertexArray(vao);
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
         //Setting the variables in the shader
@@ -130,7 +114,8 @@ int main()
         shader2.setUniform("u_position", pos);
         shader2.setUniform("u_color", sf::Vector3f(0, 1, 0));
         shader2.bind(&shader2);
-        glBindVertexArray(vao);
+        //glBindVertexArray(vao);
+        v.bind();
         if(animation_flag==1)
             glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
