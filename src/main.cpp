@@ -2,10 +2,11 @@
 //#include "SFML/Graphics.hpp"
 //#include "GLAD/glad.h"
 //#include <Array>
-#include "Window.hpp"
+#include "Window.h"
 #include "Math/mat.h"
 #include "DeltaTime.hpp"
 #include "Input.hpp"
+
 //we can define our own window class
 class myWin : public sf::RenderWindow
 {
@@ -16,35 +17,8 @@ class myWin : public sf::RenderWindow
 int main()
 {
     //Window Initialization OpenGL version 4.6 (Might not work on mac)
-    sf::RenderWindow window(sf::VideoMode(900, 900), "OpenGL SFML");
-    //Initializing opengl functions
-    if (!gladLoadGLLoader(reinterpret_cast<GLADloadproc>(sf::Context::getFunction)))
-    {
-        std::cout << "Failed to initialize GLEW\n";
-        return EXIT_FAILURE;
-    }
-
-    //Defining a square covering the screen (JUST FOR TESTING)
-    const vec2 vertices[] =
-	{
-		vec2(-1,-1), vec2(-1,-1),
-		vec2(1,-1), vec2(1,-1),
-		vec2(1,1), vec2(1,1),
-		vec2(-1,1), vec2(-1,1)
-	};
-	const unsigned int indices[] = { 0,1,2,0,2,3 };
-
-
-    Mesh v(vertices, sizeof(vertices), indices, sizeof(indices));
-    v.set_attrib_format(0, 2, GL_FLOAT, 4, 0);
-    v.set_attrib_format(1, 2, GL_FLOAT, 4, 2);
-    //v.set_attrib_format(0, 2, GL_FLOAT, sizeof(vec2)*2, 0);
-    //v.set_attrib_format(0, 2, GL_FLOAT, sizeof(vec2)*2, sizeof(vec2));
-
-
-
-
-    //shaders just for testing
+    GameWindow window(sf::VideoMode(900, 900), "OpenGL SFML");
+    
     sf::Shader shader1;
     shader1.loadFromFile("shaders/circle_default.vert", "shaders/circle_default.frag");
 
@@ -104,10 +78,8 @@ int main()
         shader1.setUniform("u_iTime", Time.get_time());
         shader1.setUniform("u_intensity", pow(abs(intensity/2),0.6f));
         shader1.bind(&shader1);
-        v.bind();
-        //glBindVertexArray(vao);
-        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
+        window.draw_square();
         //Setting the variables in the shader
         shader2.setUniform("u_iTime", anim);
         shader2.setUniform("u_scale", 1.0f);
@@ -115,10 +87,8 @@ int main()
         shader2.setUniform("u_color", sf::Vector3f(0, 1, 0));
         shader2.bind(&shader2);
         //glBindVertexArray(vao);
-        v.bind();
         if(animation_flag==1)
-            glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-
+            window.draw_square();
         //unbinding to draw text
         glBindVertexArray(0);
         shader1.bind(0);

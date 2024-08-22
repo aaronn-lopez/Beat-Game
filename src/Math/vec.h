@@ -91,8 +91,8 @@ struct vec4
 };
 
 //VECTOR 2
-vec2::vec2(const vec3& v): x(v.x), y(v.y){}
-vec2::vec2(const vec4& v): x(v.x), y(v.y){}
+inline vec2::vec2(const vec3& v): x(v.x), y(v.y){}
+inline vec2::vec2(const vec4& v): x(v.x), y(v.y){}
 inline void vec2::operator=(const vec3& v) { x = v.x; y = v.y; }
 inline void vec2::operator=(const vec4& v) { x = v.x; y = v.y; }
 inline void vec2::operator*=(const float s)
@@ -154,8 +154,8 @@ inline std::ostream& operator<<(std::ostream& os, const vec2& v) {
 
 
 //VECTOR 3
-vec3::vec3(const vec2& v) : x(v.x), y(v.y), z(0) {};
-vec3::vec3(const vec4& v) : x(v.x), y(v.y), z(v.z) {};
+inline vec3::vec3(const vec2& v) : x(v.x), y(v.y), z(0) {};
+inline vec3::vec3(const vec4& v) : x(v.x), y(v.y), z(v.z) {};
 inline void vec3::operator=(const vec2& v) { x = v.x; y = v.y; }
 inline void vec3::operator=(const vec4& v) { x = v.x; y = v.y; z = v.z; }
 inline void vec3::operator*=(const float s)
@@ -222,8 +222,8 @@ inline std::ostream& operator<<(std::ostream& os, const vec3& v) {
 
 
 //VECTOR 4
-vec4::vec4(const vec2& v) : x(v.x), y(v.y), z(0), w(0) {};
-vec4::vec4(const vec3& v) : x(v.x), y(v.y), z(v.z), w(0) {};
+inline vec4::vec4(const vec2& v) : x(v.x), y(v.y), z(0), w(0) {};
+inline vec4::vec4(const vec3& v) : x(v.x), y(v.y), z(v.z), w(0) {};
 inline void vec4::operator=(const vec2& v) { x = v.x; y = v.y; }
 inline void vec4::operator=(const vec3& v) { x = v.x; y = v.y; z = v.z; }
 inline void vec4::operator*=(const float s)
