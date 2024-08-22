@@ -1,7 +1,8 @@
 
-#include "SFML/Graphics.hpp"
-#include "GLAD/glad.h"
-#include <Array>
+//#include "SFML/Graphics.hpp"
+//#include "GLAD/glad.h"
+//#include <Array>
+#include "Window.hpp"
 #include "Math/mat.h"
 #include "DeltaTime.hpp"
 #include "Input.hpp"
@@ -14,7 +15,6 @@ class myWin : public sf::RenderWindow
 
 int main()
 {
-    
     //Window Initialization OpenGL version 4.6 (Might not work on mac)
     sf::RenderWindow window(sf::VideoMode(900, 900), "OpenGL SFML");
     //Initializing opengl functions
@@ -52,6 +52,11 @@ int main()
     glBindVertexArray(0);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+
+
+    Mesh v(vertices, sizeof(vertices), indices, sizeof(indices));
+    v.set_attrib_format(0, 2, GL_FLOAT, sizeof(vec2)*2, 0);
+    v.set_attrib_format(1, 2, GL_FLOAT, sizeof(vec2)*2, sizeof(vec2));
 
 
 
@@ -115,7 +120,7 @@ int main()
         //setting the variables in the shader
         shader1.setUniform("u_iTime", Time.get_time());
         shader1.setUniform("u_intensity", pow(abs(intensity/2),0.6f));
-        sf::Shader::bind(&shader1);
+        shader1.bind(&shader1);
         glBindVertexArray(vao);
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
