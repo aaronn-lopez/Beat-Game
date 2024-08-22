@@ -55,8 +55,8 @@ int main()
 
 
     Mesh v(vertices, sizeof(vertices), indices, sizeof(indices));
-    v.set_attrib_format(0, 2, GL_FLOAT, sizeof(vec2)*2, 0);
-    v.set_attrib_format(1, 2, GL_FLOAT, sizeof(vec2)*2, sizeof(vec2));
+    v.set_attrib_format(0, 2, GL_FLOAT, 4, 0);
+    v.set_attrib_format(1, 2, GL_FLOAT, 4, 2);
 
 
 

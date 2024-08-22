@@ -83,12 +83,7 @@ void Mesh::bind()
 {
     glBindVertexArray(vao);
 }
-//void Mesh::set_attrib_format(GLuint layout_index, GLint size, GLenum gl_type, int stride, int offset)
-//{
-//    glVertexAttribPointer(layout_index, size, gl_type, GL_FALSE, GLsizeof(gl_type) * stride, (void*)(GLsizeof(gl_type) * offset));
-//}
 void Mesh::set_attrib_format(GLuint layout_index, GLint size, GLenum gl_type, int stride, int offset)
 {
-    glVertexAttribPointer(layout_index, size, gl_type, GL_FALSE, stride, (void*)(offset));
-    glEnableVertexAttribArray(layout_index);
+    glVertexAttribPointer(layout_index, size, gl_type, GL_FALSE, GLsizeof(gl_type) * stride, (void*)(GLsizeof(gl_type) * offset));
 }
