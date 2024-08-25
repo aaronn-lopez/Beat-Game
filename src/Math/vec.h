@@ -25,7 +25,9 @@ struct vec2
 	void operator-=(const vec2& v);
 	
 	vec2 operator*(const float s) const;
+	vec2 operator*(const vec2& v) const;
 	vec2 operator/(const float s) const;
+	vec2 operator/(const vec2& v) const;
 	vec2 operator+(const vec2& v) const;
 	vec2 operator-(const vec2& v) const;
 	friend vec2 operator*(const float s, const vec2& v);
@@ -52,7 +54,9 @@ struct vec3
 	void operator-=(const vec3& v);
 
 	vec3 operator*(const float s) const;
+	vec3 operator*(const vec3& v) const;
 	vec3 operator/(const float s) const;
+	vec3 operator/(const vec3& v) const;
 	vec3 operator+(const vec3& v) const;
 	vec3 operator-(const vec3& v) const;
 	friend vec3 operator*(const float s, const vec3& v);
@@ -80,7 +84,9 @@ struct vec4
 	void operator-=(const vec4& v);
 
 	vec4 operator*(const float s) const;
+	vec4 operator*(const vec4& v) const;
 	vec4 operator/(const float s) const;
+	vec4 operator/(const vec4& s) const;
 	vec4 operator+(const vec4& v) const;
 	vec4 operator-(const vec4& v) const;
 	friend vec4 operator*(const float s, const vec4& v);
@@ -119,9 +125,17 @@ inline vec2 vec2::operator*(const float s) const
 {
 	return vec2(x * s, y * s);
 }
+inline vec2 vec2::operator*(const vec2& v) const
+{
+	return vec2(x * v.x, y * v.y);
+}
 inline vec2 vec2::operator/(const float s) const 
 {
 	return vec2(x / s, y / s);
+}
+inline vec2 vec2::operator/(const vec2& v) const
+{
+	return vec2(x/v.x, y/v.y);
 }
 inline vec2 vec2::operator+(const vec2& v) const 
 {
@@ -186,9 +200,17 @@ inline vec3 vec3::operator*(const float s) const
 {
 	return vec3(x * s, y * s, z * s);
 }
+inline vec3 vec3::operator*(const vec3& v) const
+{
+	return vec3(x * v.x, y * v.y, z * v.z);
+}
 inline vec3 vec3::operator/(const float s) const
 {
 	return vec3(x / s, y / s, z / s);
+}
+inline vec3 vec3::operator/(const vec3& v) const
+{
+	return vec3(x / v.x, y / v.y, z / v.z);
 }
 inline vec3 vec3::operator+(const vec3& v) const
 {
@@ -258,9 +280,17 @@ inline vec4 vec4::operator*(const float s) const
 {
 	return vec4(x * s, y * s, z * s, w * s);
 }
+inline vec4 vec4::operator*(const vec4& v) const
+{
+	return vec4(x * v.x, y * v.y, z * v.z, w * v.w);
+}
 inline vec4 vec4::operator/(const float s) const
 {
 	return vec4(x / s, y / s, z / s, w / s);
+}
+inline vec4 vec4::operator/(const vec4& v) const
+{
+	return vec4(x / v.x, y / v.y, z / v.z, w / v.w);
 }
 inline vec4 vec4::operator+(const vec4& v) const
 {
@@ -295,6 +325,10 @@ template<typename T>
 inline T clamp(T value, T min, T max){ return (value > max ? max : (value < min ? min : value)); }
 template<typename T>
 inline T mix(T a, T b, float amount) { return a + amount * (b - a); }
+template <typename T>
+inline T min(T a, T b){return a < b? a: b;}
+template <typename T>
+inline T max(T a, T b){return a > b? a: b;}
 inline float length(const vec2& v) { return sqrtf(v.x * v.x + v.y * v.y); }
 inline float length(const vec3& v) { return sqrtf(v.x * v.x + v.y * v.y + v.z * v.z); };
 inline float length(const vec4& v) { return sqrtf(v.x * v.x + v.y * v.y + v.z * v.z + v.w * v.w); };

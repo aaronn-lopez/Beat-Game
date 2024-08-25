@@ -3,7 +3,7 @@
 #include "GLAD/glad.h"
 #include <Array>
 #include "Math/vec.h"
-
+//#include "Input.hpp"
 
 //Function for checking opengl datatype enums(GL_FLOAT, GL_INT, GL_UNSIGNED_INT, etc)
 GLsizei GLsizeof(GLenum type);
@@ -54,18 +54,24 @@ protected:
 */
 class GameWindow : public sf::RenderWindow, private LoadGL
 {
-private:
-    Mesh square;
 public:
     GameWindow(sf::VideoMode mode, const sf::String& title);
-    
+
+    //accessors
+    vec2 get_resolution() const;
+
     //Function automatically binds vao and shader while drawing.
     void draw_square(sf::Shader& shader);
 
     //Function automatically binds vao while drawing.
     void draw_square();
 
-
+private:
+    Mesh square;
+    vec2 resolution;
+    //testing
+    void onResize();
+    private:
 private:
     GameWindow(const GameWindow&) = delete;
     void operator=(const GameWindow&) = delete;
