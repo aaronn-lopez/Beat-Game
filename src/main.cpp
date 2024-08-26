@@ -5,12 +5,6 @@
 #include "VertexShaderLayouts.h"
 #include "Input.hpp"
 
-//we can define our own window class
-class myWin : public sf::RenderWindow
-{
-    //copying RenderWindow constructors
-    using sf::RenderWindow::RenderWindow;
-};
 
 
 
