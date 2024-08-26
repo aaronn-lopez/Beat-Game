@@ -16,20 +16,21 @@ int main()
 
     sf::Shader shader1;
     shader1.loadFromFile("shaders/vert/ShaderToy_ui.vert", "shaders/frag/s1.frag");
+    sf::Shader shader2;
+    //shader2.loadFromFile("shaders/vert/ShaderToy_ui.vert", "shaders/frag/s1.frag");
+    shader2.loadFromFile("shaders/vert/text.vert", "shaders/frag/text.frag");
      
     s.iResolution = vec2(1,1);
     DeltaTime time;
-
-    s.width = 0.5;
-    s.height = 0.3f;
-
+    time.set_target_fps(245);
     sf::Font font;
     font.loadFromFile("assets/Exo.ttf");
 
+    CustomText custom_text;
+    custom_text.set_font(font);
+
     //sf::Glyph glyph = font.getGlyph(95, 45, 0);
     //text.setFillColor(sf::Color::Black); // Set the text color
-    sf::Text text("hello", font, 300);
-    text.setScale(0.3,0.3);
     Input input(window);
     while (window.isOpen())
     {
@@ -38,16 +39,18 @@ int main()
         glClearColor(0.1f, 0.1f, 0.1f, 1);
         glClear(GL_COLOR_BUFFER_BIT);
 
-        sf::Shader::bind(&shader1);
+        //sf::Shader::bind(&shader1);
         s.position = input.mouse_pos_vp();
         s.iResolution = window.get_resolution();
 
-        shader1.setUniformArray("u_var", &s.iResolution.x, 10);
+        sf::Shader::bind(&shader2);
+        shader2.setUniformArray("u_var", &s.iResolution.x, 10);
+        custom_text.draw();
         window.draw_square(); 
 
         glBindVertexArray(0);
         sf::Shader::bind(0);
-        window.draw(text);
+        //window.draw(text);
         window.display();
     }
 

@@ -3,6 +3,8 @@
 #include "GLAD/glad.h"
 #include "Mesh.hpp"
 #include "Math/vec.h"
+
+#include "CustomText.h"
 //#include "Input.hpp"
 
 

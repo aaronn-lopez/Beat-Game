@@ -1,23 +1,21 @@
-#version 330 core
+#version 410 core
+//Frag
 
-// The texture coordinates from the vertex shader
-in vec2 fragTexCoords;
 
-// The output color of the fragment
+in vec2 texCoord;
+uniform sampler2D tex0;
+
 out vec4 fragColor;
-
-// The texture containing the font glyphs
-uniform sampler2D fontTexture;
-
-// The text color passed from SFML
-uniform vec4 textColor;
-
-
+//========fragment variables========
+//Resolution
+in vec2 iResolution;			
+//Mouse screen position
+in vec2 iMouse;			
+//Global Time and sound frequency
+in float iTime;	
+in float iFrequency;	
+//===================================
 void main()
 {
-    // Sample the texture to get the alpha value of the glyph
-    float alpha = texture(fontTexture, fragTexCoords).r;
-
-    // Apply the text color and alpha blending
-    fragColor = vec4(textColor.rgb, textColor.a * alpha);
+	fragColor = texture(tex0, vec2(texCoord.x, 1 - texCoord.y));
 }

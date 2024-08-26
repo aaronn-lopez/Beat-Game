@@ -38,6 +38,9 @@ GameWindow::GameWindow(sf::VideoMode mode, const sf::String& title)
     square.load_buffer(vertices, sizeof(vertices), indices, sizeof(indices));
     square.set_attrib_format(0, 2, GL_FLOAT, 4, 0);
     square.set_attrib_format(1, 2, GL_FLOAT, 4, 2);
+    //fixing texture rendering
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
 
 
