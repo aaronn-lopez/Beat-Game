@@ -36,6 +36,7 @@ public:
 
     //Function automatically binds vao while drawing.
     void draw_square();
+    void draw(CustomText& text);
 
 private:
     Mesh square;

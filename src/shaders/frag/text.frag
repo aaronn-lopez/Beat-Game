@@ -17,5 +17,5 @@ in float iFrequency;
 //===================================
 void main()
 {
-	fragColor = texture(tex0, vec2(texCoord.x, 1 - texCoord.y));
+	fragColor = texture(tex0, vec2(texCoord.x, texCoord.y));
 }

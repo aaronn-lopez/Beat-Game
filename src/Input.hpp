@@ -12,15 +12,39 @@ private:
     unsigned char key_state[sf::Keyboard::Scancode::ScancodeCount] = {};
 public:
     Input(sf::Window& window);
+    
+    /**
+     * Handles all the input for GameWindow. Place This Function inside 
+     * Currently Active Gameloops for input to work properly
+     */
     void handle_input(GameWindow* window);
+    //Returns if current key is held down.
     bool key_down(sf::Keyboard::Key key);
+    //Return if current key was pressed.
     bool key_press(sf::Keyboard::Key key);
+    //Return if current key was released.
     bool key_release(sf::Keyboard::Key key);
+    //Return if current button is down.
     bool mouse_down(sf::Mouse::Button button);
+    //return if current button was pressed.
     bool mouse_press(sf::Mouse::Button button);
+    //return is current button was released.
     bool mouse_release(sf::Mouse::Button button);
-    vec2 mouse_pos_vp() const;
+    /**
+     * @brief This Function returns the current position of the mouse 
+     * within local space Coordinates of -100 to 100
+     * regardless of resolution or aspect ratio
+     * @note Similar to OpenGL local space -1 to 1 regardless of Aspect Ratio 
+     */
     vec2 mouse_pos() const;
+    /**
+     * @brief Similar to mouse_pos() but aspect ratio is corrected. Meaning
+     * Local Coordinates can range from vec2(-1.5, -1) to vec2(1.5, 1) multiplied by 100 or vec2(-150, -100) to vec2(150, 100)
+     * 
+     * @note The local coordinate components will never go below |1|
+     * and will always fit the smaller resolution component.
+     */
+    vec2 mouse_pos_a() const;
 };
 
 inline Input::Input(sf::Window& window) : pressed_key(-1), mouse_w(0)
@@ -114,15 +138,17 @@ inline bool Input::mouse_release(sf::Mouse::Button button)
     }
     return 0;
 }
-inline vec2 Input::mouse_pos_vp() const
-{
-    return mouse / resolution * 2 - vec2(1,1);
-}
 inline vec2 Input::mouse_pos() const
 {
+    //Screen space to Normalized -1 to 1
+    return (mouse / resolution * 2 - vec2(1,1)) * 100;
+}
+inline vec2 Input::mouse_pos_a() const
+{
+    //Aspect ratio correction
     float r = resolution.x / resolution.y;
     return resolution.x >= resolution.y? 
-        mouse_pos_vp() * vec2(r,1):
-        mouse_pos_vp() / vec2(1, r);
+        mouse_pos() * vec2(r,1):
+        mouse_pos() / vec2(1, r);
     
 }

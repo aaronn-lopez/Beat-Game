@@ -16,6 +16,8 @@ layout (location = 1) in vec2 aUV;
 	game objects the wont be affected by viewport aspect ratio
 */
 
+out vec2 texCoord;
+
 //========fragment variables========
 //Resolution
 out vec2 iResolution;
@@ -49,15 +51,8 @@ void main()
 	height = 			u_var[9];
 
 	float r = iResolution.x / iResolution.y;	
-	vec2 Pos = aPos * vec2(width, height);
+	vec2 Pos = (aPos)/100 * vec2(width, height);
 	Pos *= iResolution.x >= iResolution.y? 1/vec2(r,1): vec2(1, r); 
-	gl_Position = vec4(Pos + position, 1.0f, 1.0f);
-
+	gl_Position = vec4(Pos + position/100, 1.0f, 1.0f);
+	texCoord = aUV;
 }
-
-
-
-
-
-
-

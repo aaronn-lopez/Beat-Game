@@ -1,28 +1,47 @@
 #include "CustomText.h"
 
-
-CustomText::CustomText() : mesh(Mesh()), font_size(64)
+void CustomText::on_resize()
 {
-
-}
-void CustomText::set_font(sf::Font& font, unsigned int font_size)
-{
-    this->font_size = font_size;
-    struct GlyphData
+    if(current_res != old_res)
     {
-        sf::Vector2i position;
-        sf::Vector2i size;
-    };
-    std::array<GlyphData, Letter_count> glyph_data;
-    for(int i = Start; i<= End; i++)
-    {
-        sf::Glyph glyph = font.getGlyph(i, font_size, 0, 0);
-        glyph_data[i - Start].position = glyph.textureRect.getPosition();
-        glyph_data[i - Start].size = glyph.textureRect.getSize(); 
+        old_res = current_res;
+        font_size = old_res.x < old_res.y? old_res.x / 4: old_res.y/4;
+        setCharacterSize(font_size); 
+        //setOrigin(getLocalBounds().getSize().x/1.93f, getLocalBounds().getSize().y/1.1f);
     }
-    font_bitmap = font.getTexture(font_size);
 }
-void CustomText::draw()
+void CustomText::set_scale(const vec2& s)
 {
-    sf::Texture::bind(&font_bitmap);
+    setScale(s.x, s.y);
+}
+vec2 CustomText::get_scale() const
+{
+    return getScale();
+}
+void CustomText::set_resolution(const sf::Vector2u& res)
+{
+    current_res = res;
+    resolution = res;
+}
+void CustomText::set_position_centered(vec2 p)
+{
+    p/=100;
+
+    //Normalized coordinates -1 to 1
+    //Convertion to screenspace
+    p += vec2(1,1);
+    p /= 2;
+    p *= resolution;  
+    setPosition(p.x - getScale().x * getLocalBounds().width/2, resolution.y - p.y);
+}
+void CustomText::set_position(vec2 p)
+{
+    p/=100;
+
+    //Normalized coordinates -1 to 1
+    //Convertion to screenspace
+    p += vec2(1,1);
+    p /= 2;
+    p *= resolution;  
+    setPosition(p.x - getScale().x, resolution.y - p.y);
 }

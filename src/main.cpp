@@ -22,35 +22,45 @@ int main()
      
     s.iResolution = vec2(1,1);
     DeltaTime time;
-    time.set_target_fps(245);
+    //time.set_target_fps(245);
     sf::Font font;
     font.loadFromFile("assets/Exo.ttf");
 
-    CustomText custom_text;
-    custom_text.set_font(font);
+    CustomText text;
+    text.setFont(font);
+    text.setString("Game"); 
 
-    //sf::Glyph glyph = font.getGlyph(95, 45, 0);
-    //text.setFillColor(sf::Color::Black); // Set the text color
     Input input(window);
     while (window.isOpen())
     {
         time.handle_time();
+        //std::cout<<time.get_fps()<<'\n';
         input.handle_input(&window); 
-        glClearColor(0.1f, 0.1f, 0.1f, 1);
+        glClearColor(0.05f, 0.1f, 0.15f, 1);
         glClear(GL_COLOR_BUFFER_BIT);
 
-        //sf::Shader::bind(&shader1);
-        s.position = input.mouse_pos_vp();
+        sf::Shader::bind(&shader1);
+        s.width = 30;
+        s.height = 15;
+        s.position = input.mouse_pos() + vec2(0,s.height);
         s.iResolution = window.get_resolution();
+        //text.set_position_centered(s.position);
+        text.set_scale(vec2(0.5,0.5));
+        //text.set_position_centered(vec2(0,0));
+        text.set_position(vec2(0,0));
 
-        sf::Shader::bind(&shader2);
-        shader2.setUniformArray("u_var", &s.iResolution.x, 10);
-        custom_text.draw();
+
+        sf::Shader::bind(&shader1);
+        //sf::Texture::bind(0);
+        shader1.setUniformArray("u_var", &s.iResolution.x, 10);
         window.draw_square(); 
+        
 
-        glBindVertexArray(0);
         sf::Shader::bind(0);
-        //window.draw(text);
+        glBindVertexArray(0);
+        window.draw(text);
+
+
         window.display();
     }
 

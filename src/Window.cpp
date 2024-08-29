@@ -35,39 +35,43 @@ GameWindow::GameWindow(sf::VideoMode mode, const sf::String& title)
 		vec2(-1,1), vec2(0,1)
 	};
 	const unsigned int indices[] = { 0,1,2,0,2,3 };
-    square.load_buffer(vertices, sizeof(vertices), indices, sizeof(indices));
+    square.load_buffer(vertices, sizeof(vertices), indices, 6);
     square.set_attrib_format(0, 2, GL_FLOAT, 4, 0);
     square.set_attrib_format(1, 2, GL_FLOAT, 4, 2);
     //fixing texture rendering
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    
+    //Questionable decision for a static function
+    CustomText::set_resolution(getSize());
 }
 
 
 void GameWindow::onResize()
 {
     sf::Vector2u r = getSize();
-    resolution = vec2(static_cast<float>(r.x), static_cast<float>(r.y));
-    std::cout<<resolution<<'\n';
-    glViewport(0, 0, r.x, r.y);
+    resolution = r;
+    //glViewport(0, 0, r.x, r.y);
+    setView(sf::View(sf::FloatRect(0.f, 0.f, resolution.x, resolution.y)));
+
+    //Questionable decision for a static function
+    CustomText::set_resolution(r);
 }
 vec2 GameWindow::get_resolution() const
 {
     return resolution;
 }
     
-void GameWindow::draw_square(sf::Shader& shader)
-{
-    sf::Shader::bind(&shader);
-    square.bind();
-    square.draw(); 
-}
 void GameWindow::draw_square() 
 {
     square.bind();
     square.draw();
 }
-
+void GameWindow::draw(CustomText& text)
+{
+    text.on_resize();
+    sf::RenderWindow::draw(text);
+}
 
 
 

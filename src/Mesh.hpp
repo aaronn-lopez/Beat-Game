@@ -14,7 +14,7 @@ Use the Constructor or "load_buffer" to load vertices with their indices.
 class Mesh
 {
     //not implimented yet
-    inline static GLuint current_binded_vao = 0;
+    //inline static GLuint current_binded_vao = 0;
 private:
     int indices_count = 0;
     GLuint vao = 0;
@@ -59,12 +59,13 @@ inline Mesh::Mesh()
 }
 inline Mesh::Mesh(const void* vertices_data, size_t v_bytes, const void* indices_data, int indices_count) : Mesh::Mesh()
 { 
-    this->indices_count = sizeof(GLuint) * indices_count;
+    //this->indices_count = sizeof(GLuint) * indices_count;
+    this->indices_count = indices_count;
     glBindVertexArray(vao);
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
     glBufferData(GL_ARRAY_BUFFER, v_bytes, vertices_data, GL_STATIC_DRAW);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, this->indices_count, indices_data, GL_STATIC_DRAW);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices_count * sizeof(GLuint), indices_data, GL_STATIC_DRAW);
 }
 inline Mesh::~Mesh()
 {
@@ -79,6 +80,9 @@ inline void Mesh::bind()
 inline void Mesh::set_attrib_format(GLuint layout_index, GLint size, GLenum gl_type, int stride, int offset) 
 {
     //WARNING - possible warning, int to void*
+    glBindVertexArray(vao);
+    glBindBuffer(GL_ARRAY_BUFFER, vbo);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
     glVertexAttribPointer(layout_index, size, gl_type, GL_FALSE, GLsizeof(gl_type) * stride, (void*)(GLsizeof(gl_type) * offset));
     glEnableVertexAttribArray(layout_index);
 }
@@ -88,10 +92,10 @@ inline void Mesh::draw() const
 }
 inline void Mesh::load_buffer(const void* vertices_data, size_t v_bytes, const void* indices_data, int indices_count)
 {
-    this->indices_count = sizeof(GLuint) * indices_count;
+    this->indices_count = indices_count;
     glBindVertexArray(vao);
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
     glBufferData(GL_ARRAY_BUFFER, v_bytes, vertices_data, GL_STATIC_DRAW);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, this->indices_count, indices_data, GL_STATIC_DRAW);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices_count * sizeof(GLuint), indices_data, GL_STATIC_DRAW);
 }

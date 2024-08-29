@@ -2,6 +2,9 @@
 #include <math.h>
 #include <iostream>
 
+//sfml specific
+#include <SFML/system/Vector2.hpp>
+
 #define PI 3.14159265358979323846f
 //VECTOR 2
 struct vec2;
@@ -19,8 +22,22 @@ struct vec2
 	vec2(const vec4& v);
 	void operator=(const vec3& v);
 	void operator=(const vec4& v);
+
+	//SFML SPECIFIC
+	vec2(const sf::Vector2f& v);
+	vec2(const sf::Vector2i& v);
+	vec2(const sf::Vector2u& v);
+	//SFML SPECIFIC
+	void operator=(const sf::Vector2f& v);
+	//SFML SPECIFIC
+	void operator=(const sf::Vector2i& v);
+	//SFML SPECIFIC
+	void operator=(const sf::Vector2u& v);
+
 	void operator*=(const float s);
+	void operator*=(const vec2& v);
 	void operator/=(const float s);
+	void operator/=(const vec2& b);
 	void operator+=(const vec2& v);
 	void operator-=(const vec2& v);
 	
@@ -48,8 +65,11 @@ struct vec3
 	vec3(const vec4& v);
 	void operator=(const vec2& v);
 	void operator=(const vec4& v);
+
 	void operator*=(const float s);
+	void operator*=(const vec3& v);
 	void operator/=(const float s);
+	void operator/=(const vec3& v);
 	void operator+=(const vec3& v);
 	void operator-=(const vec3& v);
 
@@ -78,8 +98,11 @@ struct vec4
 	vec4(const vec2& v);
 	void operator=(const vec2& v);
 	void operator=(const vec3& v);
+
 	void operator*=(const float s);
+	void operator*=(const vec4& v);
 	void operator/=(const float s);
+	void operator/=(const vec4& v);
 	void operator+=(const vec4& v);
 	void operator-=(const vec4& v);
 
@@ -99,6 +122,13 @@ struct vec4
 //VECTOR 2
 inline vec2::vec2(const vec3& v): x(v.x), y(v.y){}
 inline vec2::vec2(const vec4& v): x(v.x), y(v.y){}
+
+//SFML SPECIFIC
+inline vec2::vec2(const sf::Vector2f& v): x(v.x), y(v.y){}
+inline vec2::vec2(const sf::Vector2i& v): x(static_cast<float>(v.x)), y(static_cast<float>(v.y)){}
+inline vec2::vec2(const sf::Vector2u& v): x(static_cast<float>(v.x)), y(static_cast<float>(v.y)){}
+
+
 inline void vec2::operator=(const vec3& v) { x = v.x; y = v.y; }
 inline void vec2::operator=(const vec4& v) { x = v.x; y = v.y; }
 inline void vec2::operator*=(const float s)
@@ -106,10 +136,20 @@ inline void vec2::operator*=(const float s)
 	x *= s;
 	y *= s;
 }
+inline void vec2::operator*=(const vec2& v)
+{
+	x *= v.x;
+	y *= v.y;
+}
 inline void vec2::operator/=(const float s)
 {
 	x /= s;
 	y /= s;
+}
+inline void vec2::operator/=(const vec2& v)
+{
+	x /= v.x;
+	y /= v.y;
 }
 inline void vec2::operator+=(const vec2& v)
 {
@@ -178,11 +218,23 @@ inline void vec3::operator*=(const float s)
 	y *= s;
 	z *= s;
 }
+inline void vec3::operator*=(const vec3& v)
+{
+	x *= v.x;
+	y *= v.y;
+	z *= v.z;
+}
 inline void vec3::operator/=(const float s)
 {
 	x /= s;
 	y /= s;
 	z /= s;
+}
+inline void vec3::operator/=(const vec3& v)
+{
+	x /= v.x;
+	y /= v.y;
+	z /= v.z;
 }
 inline void vec3::operator+=(const vec3& v)
 {
@@ -255,12 +307,26 @@ inline void vec4::operator*=(const float s)
 	z *= s;
 	w *= s;
 }
+inline void vec4::operator*=(const vec4& v)
+{
+	x *= v.x;
+	y *= v.y;
+	z *= v.x;
+	w *= v.w;
+}
 inline void vec4::operator/=(const float s)
 {
 	x /= s;
 	y /= s;
 	z /= s;
 	w /= s;
+}
+inline void vec4::operator/=(const vec4& v)
+{
+	x /= v.x;
+	y /= v.y;
+	z /= v.z;
+	w /= v.w;
 }
 inline void vec4::operator+=(const vec4& v)
 {
@@ -338,3 +404,22 @@ inline float dot(const vec4& L, const vec4& R) { return L.x * R.x + L.y * R.y + 
 inline vec2 normalize(const vec2& v) { float d = 1.0f/length(v); return vec2(v) * d; }
 inline vec3 normalize(const vec3& v) { float d = 1.0f/length(v); return vec3(v) * d; }
 inline vec4 normalize(const vec4& v) { float d = 1.0f/length(v); return vec4(v) * d; }
+
+
+
+//SFML SPECIFIC
+inline void vec2::operator=(const sf::Vector2f& v)
+{
+	x = v.x;
+	y = v.y;
+}
+inline void vec2::operator=(const sf::Vector2i& v)
+{
+	x = static_cast<float>(v.x);
+	y = static_cast<float>(v.y);
+}
+inline void vec2::operator=(const sf::Vector2u& v)
+{
+	x = static_cast<float>(v.x);
+	y = static_cast<float>(v.y);
+}
