@@ -43,6 +43,8 @@ GameWindow::GameWindow(sf::VideoMode mode, const sf::String& title)
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     
     //Questionable decision for a static function
+    ui_text.setOutlineColor(sf::Color::Black);
+    ui_text.setOutlineThickness(1);
     onResize();
 }
 
@@ -59,7 +61,7 @@ void GameWindow::onResize()
 
     //Questionable decision for a static function
 
-    unsigned int font_size = r.x < r.y? r.x / 4: r.y/4;
+    unsigned int font_size = r.x < r.y? r.x / 12: r.y/12;
     ui_text.setCharacterSize(font_size); 
 
     ratio_correction = resolution.x >= resolution.y?
@@ -81,38 +83,64 @@ void GameWindow::draw_square()
 }
 void GameWindow::draw_text(const sf::String& text, vec2 position, float scale)
 {
+    sf::Shader::bind(0);
+    glBindVertexArray(0);
     position *= ratio_correction;
     position /= 100;
     position += vec2(1,1);
     position /= 2;
     position *= resolution;
+    scale/=100;
 
     ui_text.setPosition(position.x, resolution.y - position.y);
     ui_text.setScale(scale, scale);
     ui_text.setString(text);
     sf::RenderWindow::draw(ui_text); 
 }
-void GameWindow::draw_ui(const UI::Button& layer, sf::Shader& s)
+void GameWindow::draw_ui(const ui::PanelNode& node, sf::Shader& s)
 {
-    Uniform::shader_ui u; 
-    u.iColor = layer.color;
-    u.position = layer.position;
-    u.size = layer.size;
-    u.iResolution = get_resolution();
-    u.CornerRadius = layer.corner_radius;
-    u.OutlineThickness = layer.outline_thickness;
-    if(layer.origin == UI::Origin::TopLeft) u.position += vec2(u.size.x, -u.size.y)/2;
+    vec2 pos = ui::origin_to_position(node, node.origin);
+    ui::uiNode* temp = node.parent;
+    while(temp!=nullptr)
+    {
+        pos += temp->position;
+        temp = temp->parent;
+    }
+
+    Uniform::shader_ui u;
+    //UI Uniforms
+    u.position = pos;
+    u.size = node.size;
+    u.iColor = node.color;
+    u.CornerRadius = node.corner_radius;
+    u.OutlineThickness = node.outline_thickness;
+    //internal Uniforms
+    u.iResolution = resolution;
+    u.iTime = 0;
+    u.iFrequency = 0;
 
     sf::Shader::bind(&s);
     s.setUniformArray("u_var", &u.iResolution.x, 14);
     draw_square();
-    sf::Shader::bind(0);
-    glBindVertexArray(0);
-    draw_text(
-        layer.text.string,
-        u.position + layer.text.offset + vec2(-u.size.x, u.size.y)/2,
-        layer.text.scale.x);
 }
+void GameWindow::draw_ui(const ui::TextNode& node)
+{
+    vec2 pos(0,0);
+    ui::uiNode* temp = node.parent;
+    while(temp!=nullptr)
+    {
+        pos += temp->position;
+        temp = temp->parent;
+    }
+    //to be changed
+    draw_text(node.string, pos, node.size.x);
+}
+
+
+
+
+
+
 
 
 

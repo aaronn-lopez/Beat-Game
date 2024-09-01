@@ -20,6 +20,7 @@ void main()
 	vec4 color = iColor;
 	float r = CornerRadius;
 	vec2 uv = (texCoord*2) - vec2(1,1);
+	//vec2 uv2 = uv;
 	vec2 d = vec2(1,1) * iScale - r;
 	uv = abs(uv) * iScale;
 	if(uv.x > d.x && uv.y > d.y) 
@@ -35,6 +36,6 @@ void main()
 	if(uv.x > line.x || uv.y > line.y)
 		color = vec4(iColor.rbg * 0.7f, iColor.a);		
 
-
-	fragColor = vec4(color);	
+	//float distance = 0.1 + length(uv2);
+	fragColor = vec4(clamp(color, 0, 1));	
 }

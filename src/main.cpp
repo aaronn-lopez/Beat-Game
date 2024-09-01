@@ -31,46 +31,38 @@ int main()
         glClearColor(0.05f, 0.1f, 0.15f, 1);
         glClear(GL_COLOR_BUFFER_BIT);
 
+        bool press = input.mouse_press(sf::Mouse::Left);
+        bool release = input.mouse_release(sf::Mouse::Left);
+        ui::PanelNode p1;
+        p1.color = vec4(0.1,0.4,0.4,1);
+        p1.position = vec2(-100,90);
+        if(p1.on_press(input.mouse_pos_a(), press, release))
+            std::cout<<"WOW\n";
+        window.draw_ui(p1, shader1);
 
-        sf::Shader::bind(&shader1); 
-        //b1.position = input.mouse_pos_a();
-        UI::Button b1;
-        b1.text.string = "Play";
-        b1.position = vec2(-90,40);
-        b1.size = vec2(100,30);
-        if(b1.on_hover(input.mouse_pos_a(), window.get_resolution()))
-        {
-            b1.color *= 1.2;
-            if(input.mouse_down(sf::Mouse::Left))
-                b1.color *= 0.8;
-        }
-        window.draw_ui(b1, shader1);
-        UI::Button b2;
-        b2.text.string = "Options";
-        b2.position = vec2(-90,0);
-        b2.size = vec2(100,30);
-        if(b2.on_hover(input.mouse_pos_a(), window.get_resolution()))
-        {
-            b2.color *= 1.2;
-            if(input.mouse_down(sf::Mouse::Left))
-                b2.color *= 0.8;
-        }
-        window.draw_ui(b2, shader1);
-        UI::Button b3;
-        b3.text.string = "Quit";
-        b3.position = vec2(-90,-40);
-        b3.size = vec2(100,30);
-        if(b3.on_hover(input.mouse_pos_a(), window.get_resolution()))
-        {
-            b3.color *= 1.2;
-            if(input.mouse_down(sf::Mouse::Left))
-                b3.color *= 0.8;
-        }
-        window.draw_ui(b3, shader1);
+        ui::TextNode t1;
+        t1.string = "PLAY";
+        t1.connect(&p1);
+        window.draw_ui(t1);
+
+        ui::PanelNode p2 = p1;
+        p2.color = vec4(0.1, 0.3, 0.3, 1);
+        p2.connect(&p1); //offset from p1
+        p2.position = vec2(0,-60);
+        if(p2.on_press(input.mouse_pos_a(), press, release))
+            std::cout<<"WOW2\n";
+        window.draw_ui(p2, shader1);
+
+        ui::TextNode t2;
+        t2.string = "OPTIONS";
+        t2.connect(&p2);
+        window.draw_ui(t2);
+
+
 
         sf::Shader::bind(0);
         glBindVertexArray(0);
-        window.draw_text("FPS: " + std::to_string(time.get_fps()), vec2(-150,100), 0.2);
+        window.draw_text("FPS: " + std::to_string(time.get_fps()), vec2(-150,100), 50);
 
 
         window.display();

@@ -4,7 +4,7 @@
 #include "Mesh.hpp"
 #include "Math/vec.h"
 
-#include "UI.h"
+#include "ui.h"
 #include "UniformLayouts.hpp"
 
 
@@ -40,7 +40,8 @@ public:
     void draw_square();
     void draw_text(const sf::String& text, vec2 position, float scale);
 
-    void draw_ui(const UI::Button& layer, sf::Shader& s);
+    void draw_ui(const ui::PanelNode& node, sf::Shader& s);
+    void draw_ui(const ui::TextNode& node);
     //EXPERIMENTAL
 
 private:
