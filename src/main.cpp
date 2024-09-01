@@ -40,9 +40,7 @@ int main()
             std::cout<<"WOW\n";
         window.draw_ui(p1, shader1);
 
-        ui::TextNode t1;
-        t1.string = "PLAY";
-        t1.connect(&p1);
+        ui::TextNode t1("play", &p1);
         window.draw_ui(t1);
 
         ui::PanelNode p2 = p1;
@@ -53,9 +51,7 @@ int main()
             std::cout<<"WOW2\n";
         window.draw_ui(p2, shader1);
 
-        ui::TextNode t2;
-        t2.string = "OPTIONS";
-        t2.connect(&p2);
+        ui::TextNode t2("Options", &p2);
         window.draw_ui(t2);
 
 
