@@ -45,7 +45,13 @@ GameWindow::GameWindow(sf::VideoMode mode, const sf::String& title)
     //Questionable decision for a static function
     ui_text.setOutlineColor(sf::Color::Black);
     ui_text.setOutlineThickness(1);
+    ui_text.setStyle(sf::Text::Bold);
     onResize();
+}
+void GameWindow::clear_screen(const vec4& color)
+{
+        glClearColor(color.x, color.y, color.z, color.w);
+        glClear(GL_COLOR_BUFFER_BIT);
 }
 
 void GameWindow::set_font(sf::Font& font)
@@ -81,7 +87,7 @@ void GameWindow::draw_square()
     square.bind();
     square.draw();
 }
-void GameWindow::draw_text(const sf::String& text, vec2 position, float scale)
+void GameWindow::draw_text(const sf::String& text, vec2 position, float scale, const vec4 c)
 {
     sf::Shader::bind(0);
     glBindVertexArray(0);
@@ -94,12 +100,17 @@ void GameWindow::draw_text(const sf::String& text, vec2 position, float scale)
 
     ui_text.setPosition(position.x, resolution.y - position.y);
     ui_text.setScale(scale, scale);
+    ui_text.setFillColor
+    (
+        sf::Color(static_cast<sf::Uint32>(c.x * 255.0f), static_cast<sf::Uint32>(c.y * 255.0f),
+        static_cast<sf::Uint32>(c.z * 255.0f), static_cast<sf::Uint32>(c.w * 255.0f))
+    );
     ui_text.setString(text);
     sf::RenderWindow::draw(ui_text); 
 }
 void GameWindow::draw_ui(const ui::PanelNode& node, sf::Shader& s)
 {
-    vec2 pos = ui::origin_to_position(node, node.origin);
+    vec2 pos = ui::convert_origin(node, node.origin);
     ui::uiNode* temp = node.parent;
     while(temp!=nullptr)
     {
@@ -133,7 +144,7 @@ void GameWindow::draw_ui(const ui::TextNode& node)
         temp = temp->parent;
     }
     //to be changed
-    draw_text(node.string, pos, node.size.x);
+    draw_text(node.string, pos, node.size.x, node.color);
 }
 
 

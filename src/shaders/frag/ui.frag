@@ -34,7 +34,7 @@ void main()
 	}
 	vec2 line = vec2(1,1) * iScale - OutlineThickness;
 	if(uv.x > line.x || uv.y > line.y)
-		color = vec4(iColor.rbg * 0.7f, iColor.a);		
+		color = vec4(iColor.xyz * 0.7f, iColor.a);		
 
 	//float distance = 0.1 + length(uv2);
 	fragColor = vec4(clamp(color, 0, 1));	

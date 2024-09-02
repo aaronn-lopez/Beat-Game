@@ -1,23 +1,7 @@
 #include "ui.h"
 
 
-
-
-
-
-
-
-ui::uiNode::uiNode
-    (uiNode* parent, const vec2& positio, const vec2& size, Origin origin)
-    : parent(parent), position(position), size(size), origin(origin){}
-
-
-ui::TextNode::TextNode( const std::string& text, uiNode* parent,
-                        const vec2& position, const vec2& size)
-    : string(text), uiNode(parent, position, size){}
-
-
-vec2 ui::origin_to_position(const ui::uiNode& node, Origin origin)
+vec2 ui::convert_origin(const ui::uiNode& node, Origin origin)
 {
     switch(node.origin)
     {
@@ -31,8 +15,27 @@ vec2 ui::origin_to_position(const ui::uiNode& node, Origin origin)
             return node.position + vec2(-node.size.x, node.size.y)/2;
         case ui::Origin::Centered:
             return node.position;
+        default:
+            return node.position;
     }
 }
+
+
+
+
+
+
+ui::uiNode::uiNode
+    (uiNode* parent, const vec2& position, const vec2& size, Origin origin)
+    : parent(parent), position(position), size(size), origin(origin){}
+
+
+ui::TextNode::TextNode( const std::string& text, uiNode* parent,
+                        const vec2& position, const vec2& size, const vec4& color)
+    : string(text), uiNode(parent, position, size), color(color){}
+
+ui::PanelNode::PanelNode(const vec2& p, uiNode* parent) : uiNode(parent, p), color(vec4(1,1,1,0.1f)){}
+
 void ui::uiNode::connect(ui::uiNode* parent)
 {
     this->parent = parent;
@@ -51,25 +54,25 @@ bool ui::PanelNode::on_hover(vec2 mouse)
     return (mouse.x > pos.x && mouse.x < pos.x + size.x &&
             mouse.y < pos.y && mouse.y > pos.y - size.y);
 }
-bool ui::PanelNode::on_press(vec2 mouse, bool press, bool release)
+bool ui::ButtonNode::on_press(vec2 mouse, bool press, bool release)
 {
-    if(pressed_node == this) 
-        color *= 1.1f;
+    color = button_color;
     if(on_hover(mouse))
     {
-        color *= 1.1f;
+        color += 0.1f;
         if(press)
         {
-            pressed_node = this;
+            is_pressed = 1;
             return 0;
         }
-        if(release && pressed_node == this)
+        if(release && is_pressed)
         {
-            pressed_node = nullptr;
+            is_pressed = 0;
             return 1;
-        } 
+        }
     }
-    if(release && pressed_node == this)
-        pressed_node = nullptr;
+    if(release && is_pressed)
+        is_pressed = 0;
+    if(is_pressed) color = button_color + 0.15f;
     return 0;
 }

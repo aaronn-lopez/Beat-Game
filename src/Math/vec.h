@@ -39,14 +39,18 @@ struct vec2
 	void operator/=(const float s);
 	void operator/=(const vec2& b);
 	void operator+=(const vec2& v);
+	void operator+=(const float s);
 	void operator-=(const vec2& v);
+	void operator-=(const float s);
 	
 	vec2 operator*(const float s) const;
 	vec2 operator*(const vec2& v) const;
 	vec2 operator/(const float s) const;
 	vec2 operator/(const vec2& v) const;
 	vec2 operator+(const vec2& v) const;
+	vec2 operator+(const float s) const;
 	vec2 operator-(const vec2& v) const;
+	vec2 operator-(const float s) const;
 	friend vec2 operator*(const float s, const vec2& v);
 	bool operator==(const vec2& v) const ;
 	bool operator!=(const vec2& v) const ;
@@ -71,14 +75,18 @@ struct vec3
 	void operator/=(const float s);
 	void operator/=(const vec3& v);
 	void operator+=(const vec3& v);
+	void operator+=(const float s);
 	void operator-=(const vec3& v);
+	void operator-=(const float s);
 
 	vec3 operator*(const float s) const;
 	vec3 operator*(const vec3& v) const;
 	vec3 operator/(const float s) const;
 	vec3 operator/(const vec3& v) const;
 	vec3 operator+(const vec3& v) const;
+	vec3 operator+(const float s) const;
 	vec3 operator-(const vec3& v) const;
+	vec3 operator-(const float s) const;
 	friend vec3 operator*(const float s, const vec3& v);
 	bool operator==(const vec3& v) const;
 	bool operator!=(const vec3& v) const;
@@ -104,14 +112,18 @@ struct vec4
 	void operator/=(const float s);
 	void operator/=(const vec4& v);
 	void operator+=(const vec4& v);
+	void operator+=(const float s);
 	void operator-=(const vec4& v);
+	void operator-=(const float s);
 
 	vec4 operator*(const float s) const;
 	vec4 operator*(const vec4& v) const;
 	vec4 operator/(const float s) const;
 	vec4 operator/(const vec4& s) const;
 	vec4 operator+(const vec4& v) const;
+	vec4 operator+(const float s) const;
 	vec4 operator-(const vec4& v) const;
+	vec4 operator-(const float s) const;
 	friend vec4 operator*(const float s, const vec4& v);
 	bool operator==(const vec4& v) const;
 	bool operator!=(const vec4& v) const;
@@ -156,10 +168,20 @@ inline void vec2::operator+=(const vec2& v)
 	x += v.x;
 	y += v.y;
 }
+inline void vec2::operator+=(const float s)
+{
+	x += s;
+	y += s;
+}
 inline void vec2::operator-=(const vec2& v)
 {
 	x -= v.x;
 	y -= v.y;
+}
+inline void vec2::operator-=(const float s)
+{
+	x -= s;
+	y -= s;
 }
 inline vec2 vec2::operator*(const float s) const
 {
@@ -181,9 +203,17 @@ inline vec2 vec2::operator+(const vec2& v) const
 {
 	return vec2(x + v.x, y + v.y);
 }
+inline vec2 vec2::operator+(const float s) const
+{
+	return vec2(x + s, y + s);
+}
 inline vec2 vec2::operator-(const vec2& v) const 
 {
 	return vec2(x - v.x, y - v.y);
+}
+inline vec2 vec2::operator-(const float s) const
+{
+	return vec2(x - s, y - s);
 }
 inline vec2 operator*(const float s, const vec2& v)
 {
@@ -242,11 +272,23 @@ inline void vec3::operator+=(const vec3& v)
 	y += v.y;
 	z += v.z;
 }
+inline void vec3::operator+=(const float s)
+{
+	x += s;
+	y += s;
+	z += s;
+}
 inline void vec3::operator-=(const vec3& v)
 {
 	x -= v.x;
 	y -= v.y;
 	z -= v.z;
+}
+inline void vec3::operator-=(const float s)
+{
+	x -= s;
+	y -= s;
+	z -= s;
 }
 inline vec3 vec3::operator*(const float s) const
 {
@@ -268,9 +310,17 @@ inline vec3 vec3::operator+(const vec3& v) const
 {
 	return vec3(x + v.x, y + v.y, z + v.z);
 }
+inline vec3 vec3::operator+(const float s) const
+{
+	return vec3(x + s, y + s, z + s);
+}
 inline vec3 vec3::operator-(const vec3& v) const
 {
 	return vec3(x - v.x, y - v.y, z - v.z);
+}
+inline vec3 vec3::operator-(const float s) const
+{
+	return vec3(x - s, y - s, z - s);
 }
 inline vec3 operator*(const float s, const vec3& v)
 {
@@ -335,12 +385,26 @@ inline void vec4::operator+=(const vec4& v)
 	z += v.z;
 	w += v.w;
 }
+inline void vec4::operator+=(const float s)
+{
+	x += s;
+	y += s;
+	z += s;
+	w += s;
+}
 inline void vec4::operator-=(const vec4& v)
 {
 	x -= v.x;
 	y -= v.y;
 	z -= v.z;
 	w -= v.w;
+}
+inline void vec4::operator-=(const float s)
+{
+	x -= s;
+	y -= s;
+	z -= s;
+	w -= s;
 }
 inline vec4 vec4::operator*(const float s) const
 {
@@ -362,9 +426,17 @@ inline vec4 vec4::operator+(const vec4& v) const
 {
 	return vec4(x + v.x, y + v.y, z + v.z, w + v.w);
 }
+inline vec4 vec4::operator+(const float s) const
+{
+	return vec4(x + s, y + s, z + s, w + s);
+}
 inline vec4 vec4::operator-(const vec4& v) const
 {
 	return vec4(x - v.x, y - v.y, z - v.z, w - v.w);
+}
+inline vec4 vec4::operator-(const float s) const
+{
+	return vec4(x - s, y - s, z - s, w - s);
 }
 inline vec4 operator*(const float s, const vec4& v)
 {

@@ -27,6 +27,7 @@ class GameWindow : public sf::RenderWindow, private LoadGL
 {
 public:
     GameWindow(sf::VideoMode mode, const sf::String& title);
+    void clear_screen(const vec4& color = vec4(0.1, 0.1, 0.1, 1));
     void set_font(sf::Font& font);
 
     //accessors
@@ -38,7 +39,8 @@ public:
 
     //Function automatically binds vao while drawing.
     void draw_square();
-    void draw_text(const sf::String& text, vec2 position, float scale);
+    void draw_text( const sf::String& text, vec2 position, float scale,
+                    const vec4 color = vec4(1,1,1,1));
 
     void draw_ui(const ui::PanelNode& node, sf::Shader& s);
     void draw_ui(const ui::TextNode& node);

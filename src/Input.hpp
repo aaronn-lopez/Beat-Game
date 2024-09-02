@@ -1,5 +1,5 @@
 #pragma once
-#include "Window.h"
+#include <SFML/Graphics.hpp>
 
 class Input
 {
@@ -17,7 +17,7 @@ public:
      * Handles all the input for GameWindow. Place This Function inside 
      * Currently Active Gameloops for input to work properly
      */
-    void handle_input(GameWindow* window);
+    void handle_input(sf::Window* window);
     //Returns if current key is held down.
     bool key_down(sf::Keyboard::Key key);
     //Return if current key was pressed.
@@ -54,7 +54,7 @@ inline Input::Input(sf::Window& window) : pressed_key(-1), mouse_w(0)
         static_cast<float>(window.getSize().x),
         static_cast<float>(window.getSize().y));
 }
-inline void Input::handle_input(GameWindow* window)
+inline void Input::handle_input(sf::Window* window)
 {
     sf::Event e;
     pressed_key = -1;
@@ -87,7 +87,7 @@ inline void Input::handle_input(GameWindow* window)
                mouse_w = e.mouseWheelScroll.delta;
             break;
             case sf::Event::Resized:
-                resolution = window->get_resolution();
+                resolution = window->getSize();
             break;
 
         }

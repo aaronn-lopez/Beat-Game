@@ -15,45 +15,60 @@ int main()
     GameWindow window(sf::VideoMode(900, 600), "OpenGL SFML"); 
 
     sf::Font font;
-    font.loadFromFile("assets/Exo.ttf");
+    font.loadFromFile("assets/Roboto.ttf");
     window.set_font(font);
 
     sf::Shader shader1;
     shader1.loadFromFile("shaders/vert/shader_ui.vert", "shaders/frag/ui.frag");
+
+    //UI Generation
+        ui::ButtonNode PLAY;
+        PLAY.button_color = vec4(0.5, 0.5, 0, 1);
+        PLAY.position = vec2(-100, 90);
+        ui::TextNode t1("PLAY", &PLAY);
+
+
+        ui::ButtonNode OPTIONS;
+        OPTIONS.connect(&PLAY);
+        OPTIONS.position = vec2(0, -PLAY.size.y);
+        ui::TextNode t2("OPTIONS", &OPTIONS);
+
+        ui::ButtonNode EXIT;
+        EXIT.connect(&OPTIONS);
+        EXIT.position = vec2(0, -OPTIONS.size.y);
+        ui::TextNode t3("EXIT", &EXIT);
      
 
     DeltaTime time;
+    time.set_target_fps(360);
     Input input(window);
     while (window.isOpen())
     {
         time.handle_time();
         input.handle_input(&window); 
-        glClearColor(0.05f, 0.1f, 0.15f, 1);
-        glClear(GL_COLOR_BUFFER_BIT);
+        window.clear_screen();
 
         bool press = input.mouse_press(sf::Mouse::Left);
         bool release = input.mouse_release(sf::Mouse::Left);
-        ui::PanelNode p1;
-        p1.color = vec4(0.1,0.4,0.4,1);
-        p1.position = vec2(-100,90);
-        if(p1.on_press(input.mouse_pos_a(), press, release))
-            std::cout<<"WOW\n";
-        window.draw_ui(p1, shader1);
 
-        ui::TextNode t1("play", &p1);
+
+        if(PLAY.on_press(input.mouse_pos_a(), press, release))
+            std::cout<<"PLAY\n";
+        if(OPTIONS.on_press(input.mouse_pos_a(), press, release))
+            std::cout<<"OPTIONS\n";
+
+        if(EXIT.on_press(input.mouse_pos_a(), press, release))
+            window.close();
+        //p1.position = vec2(-100,90);
+        //p1.position = vec2(0,0);
+        window.draw_ui(PLAY, shader1);
         window.draw_ui(t1);
 
-        ui::PanelNode p2 = p1;
-        p2.color = vec4(0.1, 0.3, 0.3, 1);
-        p2.connect(&p1); //offset from p1
-        p2.position = vec2(0,-60);
-        if(p2.on_press(input.mouse_pos_a(), press, release))
-            std::cout<<"WOW2\n";
-        window.draw_ui(p2, shader1);
-
-        ui::TextNode t2("Options", &p2);
+        window.draw_ui(OPTIONS, shader1);
         window.draw_ui(t2);
 
+        window.draw_ui(EXIT, shader1);
+        window.draw_ui(t3);
 
 
         sf::Shader::bind(0);
